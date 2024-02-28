@@ -1,34 +1,28 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  annotations:
-    argocd.argoproj.io/sync-wave: '1'
-  labels:
-    app.kubernetes.io/instance: todo-app
   name: todo-table
   namespace: todo
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
-  backoffLimit: 1
   template:
     spec:
       containers:
-        - args:
-            - '--host=postgres'
-            - '--username=admin'
-            - '--no-password'
-            - '--dbname=todo'
-            - >-
-              --command=create table Todo (id bigint not null,completed boolean
-              not null,ordering integer,title varchar(255),url
-              varchar(255),primary key (id));create sequence hibernate_sequence
-              start with 1 increment by 1;
-          command:
-            - psql
+        - name: postgresql-client
+          image: postgres:12
+          imagePullPolicy: Always
           env:
             - name: PGPASSWORD
               value: admin
-          image: 'postgres:12'
-          imagePullPolicy: Always
-          name: postgresql-client
+          command: ["psql"]
+          args:
+            [
+              "--host=postgresql",
+              "--username=admin",
+              "--no-password",
+              "--dbname=todo",
+              "--command=create table Todo (id bigint not null,completed boolean not null,ordering integer,title varchar(255),url varchar(255),primary key (id));create sequence hibernate_sequence start with 1 increment by 1;",
+            ]
       restartPolicy: Never
-  ttlSecondsAfterFinished: 100
+  backoffLimit: 1
