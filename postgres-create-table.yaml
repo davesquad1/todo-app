@@ -1,10 +1,12 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: todo-table
-  namespace: todo
   annotations:
     argocd.argoproj.io/sync-wave: "1"
+labels:
+    app.kubernetes.io/instance: todo-app
+    name: todo-table
+    namespace: todo
 spec:
   template:
     spec:
@@ -26,3 +28,4 @@ spec:
             ]
       restartPolicy: Never
   backoffLimit: 1
+  ttlSecondsAfterFinished: 100
