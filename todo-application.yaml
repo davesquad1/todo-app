@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     path: apps/todo
-    repoURL: https://github.com/redhat-developer-demos/openshift-gitops-examples
+    repoURL: https://github.com/davesquad1/todo-app
     targetRevision: minikube
   syncPolicy:
     automated:
