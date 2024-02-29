@@ -9,7 +9,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: apps/todo
+    path: todo-app
     repoURL: https://github.com/davesquad1/todo-app
     targetRevision: minikube
   syncPolicy:
